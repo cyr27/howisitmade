@@ -934,6 +934,11 @@
                     <span class="total-score">Total Blanks: 16</span>
                 </div>
                 <div class="score-card">
+                    <h4>Crossword Puzzle</h4>
+                    <p id="crossword-score-display">0/37</p> <!-- Total letters in crossword -->
+                    <span class="total-score">Total Letters: 37</span>
+                </div>
+                <div class="score-card">
                     <h4>Suffixes Game</h4>
                     <p id="suffixes-score-display">0/30</p>
                     <span class="total-score">Total Points: 30 (15 words x 2 points)</span>
@@ -953,6 +958,8 @@
         const comprehensionTotalQuestions = 15;
         let dragFillCorrectCount = 0;
         const dragFillTotalQuestions = 16; // Based on dragFillSentences.length
+        let crosswordCorrectCount = 0;
+        let crosswordTotalLetters = 0; // This will be calculated from crosswordData
         let suffixCorrectCount = 0; // Correct suffix choices
         let suffixMeaningCorrectCount = 0; // Correct meaning choices
         const suffixTotalWords = 15; // Based on suffixWords.length
@@ -1218,6 +1225,13 @@
 
             crosswordGrid = Array(crosswordData.gridSize).fill(null).map(() => Array(crosswordData.gridSize).fill(''));
 
+            // Calculate total letters for scoring
+            crosswordTotalLetters = 0;
+            crosswordData.words.forEach(wordObj => {
+                crosswordTotalLetters += wordObj.word.length;
+            });
+            crosswordCorrectCount = 0; // Reset score on new game init
+
             // Populate grid with empty cells
             for (let r = 0; r < crosswordData.gridSize; r++) {
                 for (let c = 0; c < crosswordData.gridSize; c++) {
@@ -1271,6 +1285,7 @@
 
             container.appendChild(gridElement);
             generateCrosswordClues();
+            updateAllScoresDisplay(); // Update scores display on game reset
         }
 
         function generateCrosswordClues() {
@@ -1291,13 +1306,11 @@
         }
 
         function checkCrossword() {
-            let correctCount = 0;
-            let totalLetters = 0;
+            let currentCrosswordCorrect = 0;
 
             crosswordData.words.forEach((wordObj, wordIndex) => {
                 let { word, orientation, start } = wordObj;
                 for (let i = 0; i < word.length; i++) {
-                    totalLetters++;
                     let r = start.row;
                     let c = start.col;
                     if (orientation === "across") {
@@ -1308,7 +1321,7 @@
 
                     const cellElement = document.querySelector(`.crossword-cell input[data-row="${r}"][data-col="${c}"]`);
                     if (cellElement && cellElement.value.toUpperCase() === word[i]) {
-                        correctCount++;
+                        currentCrosswordCorrect++;
                         cellElement.style.backgroundColor = '#e8ffe8'; // Light green for correct
                     } else if (cellElement) {
                         cellElement.style.backgroundColor = '#ffe8e8'; // Light red for incorrect
@@ -1316,16 +1329,18 @@
                 }
             });
 
+            crosswordCorrectCount = currentCrosswordCorrect;
             const resultDiv = document.getElementById('crossword-result');
-            if (correctCount === totalLetters) {
+            if (crosswordCorrectCount === crosswordTotalLetters) {
                 resultDiv.textContent = 'Congratulations! You completed the crossword!';
                 resultDiv.classList.add('correct');
                 resultDiv.classList.remove('incorrect');
             } else {
-                resultDiv.textContent = `You got ${correctCount} out of ${totalLetters} letters correct. Keep trying!`;
+                resultDiv.textContent = `You got ${crosswordCorrectCount} out of ${crosswordTotalLetters} letters correct. Keep trying!`;
                 resultDiv.classList.add('incorrect');
                 resultDiv.classList.remove('correct');
             }
+            updateAllScoresDisplay(); // Update scores after checking crossword
         }
 
 
@@ -1661,6 +1676,7 @@
         function updateAllScoresDisplay() {
             document.getElementById('comprehension-score-display').textContent = `${comprehensionCorrectCount}/${comprehensionTotalQuestions}`;
             document.getElementById('drag-fill-score-display').textContent = `${dragFillCorrectCount}/${dragFillTotalQuestions}`;
+            document.getElementById('crossword-score-display').textContent = `${crosswordCorrectCount}/${crosswordTotalLetters}`;
             document.getElementById('suffixes-score-display').textContent = `${suffixCorrectCount + suffixMeaningCorrectCount}/${suffixTotalPoints}`;
             document.getElementById('passive-voice-score-display').textContent = `${passiveVoiceCorrectCount}/${passiveVoiceTotalQuestions}`;
         }
@@ -1669,7 +1685,7 @@
         // Initialize games and show home page on page load
         window.onload = function() {
             createDragAndFillGame(); // Initialize the new drag and fill game
-            createCrosswordGrid();
+            createCrosswordGrid(); // This will also calculate crosswordTotalLetters
             initializeSuffixGame();
             initializePassiveVoiceGame();
             showPage('home-content', document.querySelector('.tab-button.active')); // Show home page initially
