@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #a7e0ff 0%, #d4f0ff 50%, #a7e0ff 100%); /* More vibrant gradient */
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative; /* For decorative elements */
+            overflow-x: hidden; /* Prevent horizontal scroll from decorations */
+        }
+
+        /* Decorative background shapes */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(80px);
+            z-index: -1;
+        }
+        body::before {
+            width: 300px;
+            height: 300px;
+            background-color: #ffb3ba; /* Soft pink */
+            top: -50px;
+            left: -50px;
+            animation: float1 10s infinite ease-in-out;
+        }
+        body::after {
+            width: 400px;
+            height: 400px;
+            background-color: #bae1ff; /* Soft blue */
+            bottom: -50px;
+            right: -50px;
+            animation: float2 12s infinite ease-in-out;
+        }
+
+        @keyframes float1 {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 30px); }
+            100% { transform: translate(0, 0); }
+        }
+        @keyframes float2 {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -30px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 25px; /* More rounded */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+            padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Subtle white border */
+            backdrop-filter: blur(5px); /* Glassmorphism effect */
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            font-weight: 800; /* Bolder headings */
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            font-size: 3rem; /* Larger */
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.15); /* More pronounced shadow */
+            letter-spacing: 1px;
+        }
+        h2 {
+            font-size: 2.2rem; /* Larger */
+            border-bottom: 4px solid #3498db; /* Thicker border */
+            padding-bottom: 12px;
+            display: inline-block;
+            margin-bottom: 35px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+        }
+        h3 {
+            font-size: 1.8rem; /* Larger */
+            color: #3498db;
+            margin-top: 30px;
+            margin-bottom: 25px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 25px; /* More padding */
+            border-radius: 20px; /* More rounded */
+            background: linear-gradient(145deg, #f7fcfd 0%, #eef8ff 100%); /* Softer gradient for sections */
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.08); /* More prominent inner shadow */
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .section:nth-child(odd) {
+            background: linear-gradient(145deg, #fbfdff 0%, #e6f7ff 100%); /* Slightly different gradient */
+        }
+        .question-group {
+            margin-bottom: 20px;
+            padding: 18px; /* More padding */
+            background-color: #ffffff;
+            border-radius: 15px; /* More rounded */
+            border: 1px solid #dcdcdc;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* Stronger shadow */
+        }
+        .question-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.05rem;
+        }
+        .question-group input[type="text"] {
+            border: 2px solid #ccc; /* Thicker border */
+            padding: 10px 15px;
+            border-radius: 10px; /* More rounded */
+            width: calc(100% - 30px);
+            max-width: 350px; /* Slightly wider */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-group input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.3); /* Stronger focus shadow */
+        }
+        .check-button {
+            background: linear-gradient(145deg, #3498db 0%, #2980b9 100%); /* Gradient button */
+            color: white;
+            padding: 12px 25px; /* More padding */
+            border-radius: 12px; /* More rounded */
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem; /* Larger font */
+            font-weight: 700; /* Bolder */
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4); /* Stronger shadow */
+            position: relative;
+            overflow: hidden;
+        }
+        .check-button:hover {
+            background: linear-gradient(145deg, #2980b9 0%, #3498db 100%); /* Reverse gradient on hover */
+            transform: translateY(-3px) scale(1.02); /* More pronounced hover effect */
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5);
+        }
+        .check-button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: 700; /* Bolder */
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .correct {
+            color: #27ae60;
+            text-shadow: 0 0 5px rgba(39, 174, 96, 0.3);
+        }
+        .incorrect {
+            color: #e74c3c;
+            text-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Drag and Fill Game */
+        .drag-fill-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .word-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #e6f7ff;
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            min-height: 100px;
+            width: 100%;
+            max-width: 900px;
+        }
+        .word-card {
+            background: linear-gradient(145deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: grab;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            user-select: none; /* Prevent text selection */
+            min-width: 80px; /* Ensure cards are visible */
+            text-align: center;
+        }
+        .word-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .word-card.dragging {
+            opacity: 0.7;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .sentences-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 900px;
+        }
+        .sentence-item {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #dcdcdc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 5px;
+        }
+        .drop-zone {
+            display: inline-block;
+            min-width: 100px; /* Space for the word */
+            height: 30px;
+            border-bottom: 2px dashed #3498db;
+            vertical-align: middle;
+            margin: 0 5px;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 30px; /* Center text vertically */
+        }
+        .drop-zone.hovered {
+            border-color: #2ecc71;
+            background-color: #e8ffe8;
+        }
+        .drop-zone.filled {
+            border-bottom: 2px solid #27ae60;
+            background-color: #e8ffe8;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .drop-zone.incorrect-fill {
+            background-color: #ffe8e8;
+            border-color: #e74c3c;
+        }
+        .drag-fill-feedback {
+            margin-top: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-height: 30px;
+            text-align: center;
+        }
+        .drag-fill-feedback.correct { color: #27ae60; }
+        .drag-fill-feedback.incorrect { color: #e74c3c; }
+
+        /* Crossword */
+        .crossword-grid {
+            display: grid;
+            gap: 2px; /* More visible gaps */
+            background-color: #aaddff; /* Lighter blue background for grid */
+            border: 2px solid #88ccff; /* Blue border */
+            margin: 25px auto;
+            max-width: 450px; /* Slightly larger */
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .crossword-cell {
+            width: 35px; /* Larger cells */
+            height: 35px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid #e0f2ff; /* Softer cell borders */
+            position: relative;
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.05);
+        }
+        .crossword-cell input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            border: none;
+            padding: 0;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 1.2rem; /* Larger input font */
+            background-color: transparent;
+            font-weight: 700;
+            color: #34495e;
+        }
+        .crossword-cell.empty {
+            background-color: #34495e; /* Darker empty cells */
+            border: none;
+        }
+        .crossword-cell .number {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 0.7rem; /* Slightly larger number */
+            color: #777;
+            font-weight: bold;
+        }
+        .clues-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .clues-column {
+            width: 48%;
+            min-width: 280px; /* Wider columns */
+            margin-bottom: 20px;
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #d4eeff;
+        }
+        .clues-column h4 {
+            font-size: 1.3rem; /* Larger */
+            color: #3498db;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #aaddff; /* Dashed border */
+            padding-bottom: 8px;
+        }
+        .clues-column ol {
+            list-style-type: decimal;
+            padding-left: 25px;
+        }
+        .clues-column li {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        /* Suffixes Game */
+        .suffix-game-container {
+            text-align: center;
+        }
+        .word-display {
+            font-size: 3rem; /* Larger */
+            font-weight: 800;
+            margin-bottom: 35px;
+            color: #2c3e50;
+            min-height: 80px; /* Taller */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #fefefe 0%, #f0f0f0 100%);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 2px solid #eee;
+            letter-spacing: 1px;
+        }
+        .suffix-buttons button {
+            background: linear-gradient(145deg, #2ecc71 0%, #27ae60 100%); /* Green gradient */
+            color: white;
+            padding: 18px 35px; /* More padding */
+            border-radius: 15px; /* More rounded */
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem; /* Larger font */
+            font-weight: 700;
+            margin: 0 18px; /* More margin */
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+        .suffix-buttons button:nth-child(2) {
+            background: linear-gradient(145deg, #e67e22 0%, #d35400 100%); /* Orange gradient */
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.4);
+        }
+        .suffix-buttons button:hover {
+            transform: translateY(-5px) scale(1.03); /* More pronounced hover */
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        }
+        .suffix-buttons button:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        .feedback-message {
+            margin-top: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-height: 35px;
+        }
+        .score-display {
+            margin-top: 25px;
+            font-size: 1.5rem; /* Larger */
+            font-weight: bold;
+            color: #34495e;
+        }
+        .next-word-button {
+            background: linear-gradient(145deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        .next-word-button:hover {
+            background: linear-gradient(145deg, #2980b9 0%, #3498db 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Suffix Meaning Section */
+        .suffix-meaning-question {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .suffix-meaning-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .suffix-meaning-options label {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #a7d9ff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        .suffix-meaning-options label:hover {
+            background-color: #d4eeff;
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .suffix-meaning-options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .suffix-meaning-options input[type="radio"]:checked + span {
+            font-weight: bold;
+            color: #3498db;
+        }
+        .check-meaning-button {
+            background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 6px 15px rgba(155, 89, 182, 0.4);
+        }
+        .check-meaning-button:hover {
+            background: linear-gradient(145deg, #8e44ad 0%, #9b59b6 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.5);
+        }
+
+
+        /* Passive Voice Game */
+        .passive-voice-game {
+            text-align: center;
+        }
+        .sentence-display {
+            font-size: 2rem; /* Larger */
+            margin-bottom: 35px;
+            color: #2c3e50;
+            background: linear-gradient(145deg, #fefefe 0%, #f0f0f0 100%);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 2px solid #eee;
+            min-height: 100px; /* Taller */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            line-height: 1.5;
+        }
+        .input-area {
+            margin-bottom: 25px;
+        }
+        .input-area input[type="text"] {
+            width: 85%; /* Wider input */
+            max-width: 700px;
+            padding: 15px 20px; /* More padding */
+            border: 3px solid #ccc; /* Thicker border */
+            border-radius: 12px; /* More rounded */
+            font-size: 1.2rem; /* Larger font */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .input-area input[type="text"]:focus {
+            outline: none;
+            border-color: #9b59b6; /* Purple focus color */
+            box-shadow: 0 0 0 5px rgba(155, 89, 182, 0.4); /* Stronger focus shadow */
+        }
+        .game-buttons button {
+            background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 100%); /* Purple gradient */
+            color: white;
+            padding: 15px 30px; /* More padding */
+            border-radius: 12px; /* More rounded */
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem; /* Larger font */
+            font-weight: 700;
+            margin: 0 12px; /* More margin */
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.4);
+        }
+        .game-buttons button:hover {
+            background: linear-gradient(145deg, #8e44ad 0%, #9b59b6 100%); /* Reverse gradient on hover */
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(155, 89, 182, 0.5);
+        }
+        .game-buttons button:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 10px rgba(155, 89, 182, 0.3);
+        }
+        .passive-feedback {
+            margin-top: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-height: 35px;
+        }
+        .score-passive {
+            margin-top: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        /* Tab Navigation Styles */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 35px;
+            background: linear-gradient(145deg, #fcfcfc 0%, #f0f0f0 100%); /* Lighter gradient for nav */
+            border-radius: 20px; /* More rounded */
+            padding: 12px; /* More padding */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* Stronger shadow */
+            flex-wrap: wrap;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .tab-button {
+            background-color: #eef8ff; /* Lighter base */
+            color: #34495e;
+            padding: 15px 30px; /* More padding */
+            border-radius: 12px; /* More rounded */
+            border: none;
+            cursor: pointer;
+            font-size: 1.15rem; /* Slightly larger */
+            font-weight: 700;
+            margin: 6px 10px; /* More margin */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .tab-button:hover {
+            background-color: #d4eeff; /* Lighter blue on hover */
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .tab-button.active {
+            background: linear-gradient(145deg, #3498db 0%, #2980b9 100%); /* Blue gradient for active */
+            color: white;
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5);
+            transform: translateY(-2px);
+            border: 1px solid #2980b9;
+        }
+        .content-page {
+            display: none;
+        }
+        .content-page.active {
+            display: block;
+        }
+        .home-content {
+            text-align: center;
+            padding: 50px 30px; /* More padding */
+            background: linear-gradient(145deg, #e8f6f3 0%, #d4f0ef 100%); /* Soft green gradient */
+            border-radius: 20px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .home-content p {
+            font-size: 1.3rem; /* Larger font */
+            line-height: 1.8;
+            color: #555;
+            max-width: 900px; /* Wider text area */
+            margin: 25px auto;
+        }
+        .home-content img {
+            max-width: 90%; /* Larger image */
+            height: auto;
+            border-radius: 20px;
+            margin-top: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 3px solid #3498db; /* Border around image */
+        }
+
+        /* Scores Section Specific Styles */
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .score-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .score-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .score-card h4 {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .score-card p {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #3498db;
+            margin-top: 10px;
+        }
+        .score-card .total-score {
+            font-size: 1.1rem;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-language text-blue-500 mr-3"></i> Language Learning Hub <i class="fas fa-brain text-purple-500 ml-3"></i></h1>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-button active" onclick="showPage('home-content', this)"><i class="fas fa-home mr-2"></i>Home</button>
+            <button class="tab-button" onclick="showPage('comprehension-section', this)"><i class="fas fa-book-open mr-2"></i>Comprehension</button>
+            <button class="tab-button" onclick="showPage('vocabularies-section', this)"><i class="fas fa-spell-check mr-2"></i>Vocabularies</button>
+            <button class="tab-button" onclick="showPage('suffixes-section', this)"><i class="fas fa-puzzle-piece mr-2"></i>Suffixes Game</button>
+            <button class="tab-button" onclick="showPage('passive-voice-section', this)"><i class="fas fa-comments mr-2"></i>Passive Voice Game</button>
+            <button class="tab-button" onclick="showPage('scores-section', this); updateAllScoresDisplay();"><i class="fas fa-star mr-2"></i>Scores</button>
+        </nav>
+
+        <!-- Home Page Content -->
+        <div id="home-content" class="content-page active home-content section">
+            <h2><i class="fas fa-question-circle mr-3 text-green-600"></i>How Is It Made?<i class="fas fa-industry ml-3 text-gray-700"></i></h2>
+            <p>Welcome to the Language Learning Hub! Embark on an exciting journey to master English through engaging and interactive activities designed to make learning fun and effective.</p>
+            <p>This section kicks off with "A New Life for Your Jeans," exploring the fascinating process behind everyday items. Use the vibrant tabs above to seamlessly navigate through challenging comprehension questions, exciting vocabulary games, tricky suffix challenges, and dynamic passive voice exercises. Get ready to learn and play!</p>
+            <img src="https://placehold.co/800x400/3498db/ffffff?text=HOW+IS+IT+MADE%3F+EXPLORE%21" alt="How Is It Made? Placeholder Image">
+        </div>
+
+        <!-- 1. Comprehension Section -->
+        <div id="comprehension-section" class="content-page section">
+            <h2><i class="fas fa-glasses mr-3 text-blue-600"></i>1. Comprehension: A New Life for Your Jeans<i class="fas fa-jeans ml-3 text-indigo-600"></i></h2>
+            <p class="text-center mb-6 text-xl text-gray-700">Read the text about jeans production and test your understanding!</p>
+
+            <div class="comprehension-questions">
+                <!-- Question 1: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q1">1. Many people like stonewashed jeans. To make these jeans, they are put into a washing machine and washed with _________ to make them soft and more comfortable.</label>
+                    <input type="text" id="q1" data-answer="stones" class="rounded-lg">
+                    <div id="q1-result" class="result"></div>
+                </div>
+
+                <!-- Question 2: Multiple Choice -->
+                <div class="question-group">
+                    <label>2. What colour are the original denim jeans?</label>
+                    <input type="radio" id="q2a" name="q2" value="dark blue"> <label for="q2a">a) Light blue</label><br>
+                    <input type="radio" id="q2b" name="q2" value="dark blue"> <label for="q2b">b) Dark blue</label><br>
+                    <input type="radio" id="q2c" name="q2" value="black"> <label for="q2c">c) Black</label>
+                    <div id="q2-result" class="result"></div>
+                </div>
+
+                <!-- Question 3: True/False -->
+                <div class="question-group">
+                    <label>3. True or False: Denim jeans are packed into boxes and transported all over the world.</label>
+                    <input type="radio" id="q3a" name="q3" value="true"> <label for="q3a">True</label><br>
+                    <input type="radio" id="q3b" name="q3" value="false"> <label for="q3b">False</label>
+                    <div id="q3-result" class="result"></div>
+                </div>
+
+                <!-- Question 4: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q4">4. Jeans travel up to 60,000 _________ to reach the shops.</label>
+                    <input type="text" id="q4" data-answer="kilometres" class="rounded-lg">
+                    <div id="q4-result" class="result"></div>
+                </div>
+
+                <!-- Question 5: Multiple Choice -->
+                <div class="question-group">
+                    <label>5. Where are most jeans in the world sold?</label>
+                    <input type="radio" id="q5a" name="q5" value="USA"> <label for="q5a">a) USA</label><br>
+                    <input type="radio" id="q5b" name="q5" value="Europe"> <label for="q5b">b) Europe</label><br>
+                    <input type="radio" id="q5c" name="q5" value="Asia"> <label for="q5c">c) Asia</label>
+                    <div id="q5-result" class="result"></div>
+                </div>
+
+                <!-- Question 6: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q6">6. Last year, people bought about 450 million pairs of _________.</label>
+                    <input type="text" id="q6" data-answer="jeans" class="rounded-lg">
+                    <div id="q6-result" class="result"></div>
+                </div>
+
+                <!-- Question 7: True/False -->
+                <div class="question-group">
+                    <label>7. True or False: A lot of water and energy is needed to make one pair of jeans.</label>
+                    <input type="radio" id="q7a" name="q7" value="true"> <label for="q7a">True</label><br>
+                    <input type="radio" id="q7b" name="q7" value="false"> <label for="q7b">False</label>
+                    <div id="q7-result" class="result"></div>
+                </div>
+
+                <!-- Question 8: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q8">8. Jeans are made from a material called _________.</label>
+                    <input type="text" id="q8" data-answer="denim" class="rounded-lg">
+                    <div id="q8-result" class="result"></div>
+                </div>
+
+                <!-- Question 9: Multiple Choice -->
+                <div class="question-group">
+                    <label>9. Where does cotton grow in warm, wet countries?</label>
+                    <input type="radio" id="q9a" name="q9" value="China, India and Brazil"> <label for="q9a">a) China, India and Brazil</label><br>
+                    <input type="radio" id="q9b" name="q9" value="USA, Canada and Mexico"> <label for="q9b">b) USA, Canada and Mexico</label><br>
+                    <input type="radio" id="q9c" name="q9" value="UK, France and Germany"> <label for="q9c">c) UK, France and Germany</label>
+                    <div id="q9-result" class="result"></div>
+                </div>
+
+                <!-- Question 10: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q10">10. It takes about six months for a cotton _________ to grow into a plant and produce cotton.</label>
+                    <input type="text" id="q10" data-answer="seed" class="rounded-lg">
+                    <div id="q10-result" class="result"></div>
+                </div>
+
+                <!-- Question 11: True/False -->
+                <div class="question-group">
+                    <label>11. True or False: Cotton needs a lot of water to grow.</label>
+                    <input type="radio" id="q11a" name="q11" value="true"> <label for="q11a">True</label><br>
+                    <input type="radio" id="q11b" name="q11" value="false"> <label for="q11b">False</label>
+                    <div id="q11-result" class="result"></div>
+                </div>
+
+                <!-- Question 12: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q12">12. After the cotton is harvested, it is transported to a _________ and made into yarn.</label>
+                    <input type="text" id="q12" data-answer="factory" class="rounded-lg">
+                    <div id="q12-result" class="result"></div>
+                </div>
+
+                <!-- Question 13: Multiple Choice -->
+                <div class="question-group">
+                    <label>13. What is indigo dye used for?</label>
+                    <input type="radio" id="q13a" name="q13" value="to make jeans soft"> <label for="q13a">a) To make jeans soft</label><br>
+                    <input type="radio" id="q13b" name="q13" value="to colour the yarn dark blue"> <label for="q13b">b) To colour the yarn dark blue</label><br>
+                    <input type="radio" id="q13c" name="q13" value="to clean the jeans"> <label for="q13c">c) To clean the jeans</label>
+                    <div id="q13-result" class="result"></div>
+                </div>
+
+                <!-- Question 14: Fill in the blank -->
+                <div class="question-group">
+                    <label for="q14">14. The yarn is made into denim material, which is cut to make _________.</label>
+                    <input type="text" id="q14" data-answer="jeans" class="rounded-lg">
+                    <div id="q14-result" class="result"></div>
+                </div>
+
+                <!-- Question 15: True/False -->
+                <div class="question-group">
+                    <label>15. True or False: One pair of jeans uses very little water and energy to produce.</label>
+                    <input type="radio" id="q15a" name="q15" value="true"> <label for="q15a">True</label><br>
+                    <input type="radio" id="q15b" name="q15" value="false"> <label for="q15b">False</label>
+                    <div id="q15-result" class="result"></div>
+                </div>
+
+                <button class="check-button" onclick="checkComprehension()"><i class="fas fa-check-circle mr-2"></i>Check Answers</button>
+            </div>
+        </div>
+
+        <!-- 2. Vocabularies Section -->
+        <div id="vocabularies-section" class="content-page section">
+            <h2><i class="fas fa-language mr-3 text-purple-600"></i>2. Vocabularies<i class="fas fa-lightbulb ml-3 text-yellow-500"></i></h2>
+
+            <!-- Drag and Fill in the Blanks Game -->
+            <h3><i class="fas fa-hand-rock mr-2 text-blue-500"></i>Drag and Fill in the Blanks</h3>
+            <p class="text-center mb-6 text-lg text-gray-700">Drag the word cards to complete the sentences!</p>
+            <div class="drag-fill-container">
+                <div id="drag-words-container" class="word-cards-container">
+                    <!-- Word cards will be generated by JavaScript -->
+                </div>
+                <div id="sentences-container" class="sentences-container">
+                    <!-- Sentences with blanks will be generated by JavaScript -->
+                </div>
+            </div>
+            <p id="drag-fill-feedback" class="drag-fill-feedback"></p>
+            <button class="check-button" onclick="resetDragFillGame()"><i class="fas fa-redo-alt mr-2"></i>Reset Drag & Fill Game</button>
+
+            <!-- Crossword Puzzle -->
+            <h3 class="mt-10"><i class="fas fa-grip-horizontal mr-2 text-green-600"></i>Crossword Puzzle</h3>
+            <p class="text-center mb-6 text-lg text-gray-700">Fill in the blanks to complete the crossword!</p>
+            <div id="crossword-container">
+                <!-- Crossword grid will be generated by JavaScript -->
+            </div>
+            <div class="clues-container">
+                <div class="clues-column">
+                    <h4>Across <i class="fas fa-arrow-right ml-2"></i></h4>
+                    <ol id="crossword-clues-across">
+                        <!-- Clues will be generated by JavaScript -->
+                    </ol>
+                </div>
+                <div class="clues-column">
+                    <h4>Down <i class="fas fa-arrow-down ml-2"></i></h4>
+                    <ol id="crossword-clues-down">
+                        <!-- Clues will be generated by JavaScript -->
+                    </ol>
+                </div>
+            </div>
+            <button class="check-button" onclick="checkCrossword()"><i class="fas fa-puzzle-piece mr-2"></i>Check Crossword</button>
+            <div id="crossword-result" class="result"></div>
+        </div>
+
+        <!-- 3. Suffixes Game -->
+        <div id="suffixes-section" class="content-page section">
+            <h2><i class="fas fa-cogs mr-3 text-orange-600"></i>3. Suffixes Game: -sion vs -tion<i class="fas fa-dice ml-3 text-red-500"></i></h2>
+            <p class="text-center mb-6 text-lg text-gray-700">Decide if the word needs '-sion' or '-tion', then choose its meaning.</p>
+            <div class="suffix-game-container">
+                <div id="suffix-word-display" class="word-display"></div>
+
+                <div id="suffix-choice-area">
+                    <div class="suffix-buttons">
+                        <button onclick="checkSuffix('tion')"><i class="fas fa-angle-right mr-2"></i>-tion</button>
+                        <button onclick="checkSuffix('sion')"><i class="fas fa-angle-right mr-2"></i>-sion</button>
+                    </div>
+                </div>
+
+                <div id="meaning-choice-area" style="display: none;">
+                    <div id="suffix-meaning-question" class="suffix-meaning-question"></div>
+                    <div id="suffix-meaning-options" class="suffix-meaning-options">
+                        <!-- Meaning options will be generated here -->
+                    </div>
+                    <button class="check-meaning-button" onclick="checkMeaning()"><i class="fas fa-check mr-2"></i>Check Meaning</button>
+                </div>
+
+                <div id="suffix-feedback" class="feedback-message"></div>
+                <div id="suffix-score" class="score-display">Score: 0</div>
+                <button class="next-word-button" onclick="nextSuffixWord()"><i class="fas fa-forward mr-2"></i>Next Word</button>
+            </div>
+        </div>
+
+        <!-- 4. Passive Voice Game -->
+        <div id="passive-voice-section" class="content-page section">
+            <h2><i class="fas fa-microphone-alt mr-3 text-teal-600"></i>4. Passive Voice Game<i class="fas fa-exchange-alt ml-3 text-gray-700"></i></h2>
+            <p class="text-center mb-6 text-lg text-gray-700">Change the active sentence to passive voice.</p>
+            <div class="passive-voice-game">
+                <div id="passive-sentence-display" class="sentence-display"></div>
+                <div class="input-area">
+                    <input type="text" id="passive-user-input" placeholder="Enter the passive sentence here..." class="rounded-lg">
+                </div>
+                <div class="game-buttons">
+                    <button onclick="checkPassiveVoice()"><i class="fas fa-check mr-2"></i>Check Answer</button>
+                    <button onclick="nextPassiveSentence()"><i class="fas fa-arrow-right mr-2"></i>Next Sentence</button>
+                </div>
+                <div id="passive-feedback" class="passive-feedback"></div>
+                <div id="passive-score" class="score-passive">Score: 0</div>
+            </div>
+        </div>
+
+        <!-- 5. Scores Section -->
+        <div id="scores-section" class="content-page section">
+            <h2><i class="fas fa-trophy mr-3 text-yellow-500"></i>Your Game Scores<i class="fas fa-chart-line ml-3 text-green-500"></i></h2>
+            <p class="text-center mb-8 text-lg text-gray-700">See how you're performing across all activities!</p>
+
+            <div class="scores-grid">
+                <div class="score-card">
+                    <h4>Comprehension</h4>
+                    <p id="comprehension-score-display">0/15</p>
+                    <span class="total-score">Total Questions: 15</span>
+                </div>
+                <div class="score-card">
+                    <h4>Drag & Fill</h4>
+                    <p id="drag-fill-score-display">0/16</p>
+                    <span class="total-score">Total Blanks: 16</span>
+                </div>
+                <div class="score-card">
+                    <h4>Suffixes Game</h4>
+                    <p id="suffixes-score-display">0/30</p>
+                    <span class="total-score">Total Points: 30 (15 words x 2 points)</span>
+                </div>
+                <div class="score-card">
+                    <h4>Passive Voice</h4>
+                    <p id="passive-voice-score-display">0/10</p>
+                    <span class="total-score">Total Sentences: 10</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Global Score Variables ---
+        let comprehensionCorrectCount = 0;
+        const comprehensionTotalQuestions = 15;
+        let dragFillCorrectCount = 0;
+        const dragFillTotalQuestions = 16; // Based on dragFillSentences.length
+        let suffixCorrectCount = 0; // Correct suffix choices
+        let suffixMeaningCorrectCount = 0; // Correct meaning choices
+        const suffixTotalWords = 15; // Based on suffixWords.length
+        const suffixTotalPoints = suffixTotalWords * 2; // Each word has 2 points (suffix + meaning)
+        let passiveVoiceCorrectCount = 0;
+        const passiveVoiceTotalQuestions = 10; // Based on passiveVoiceSentences.length
+
+        // --- Tab Navigation Logic ---
+        function showPage(pageId, clickedButton) {
+            // Hide all content pages
+            const pages = document.querySelectorAll('.content-page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show the selected page
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active');
+            }
+
+            // Activate the clicked button
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+        }
+
+        // --- Comprehension Section Logic ---
+        function checkComprehension() {
+            const questions = [
+                { id: 'q1', type: 'text', answer: 'stones' },
+                { id: 'q2', type: 'radio', answer: 'dark blue' },
+                { id: 'q3', type: 'radio', answer: 'true' },
+                { id: 'q4', type: 'text', answer: 'kilometres' },
+                { id: 'q5', type: 'radio', answer: 'USA' },
+                { id: 'q6', type: 'text', answer: 'jeans' },
+                { id: 'q7', type: 'radio', answer: 'true' },
+                { id: 'q8', type: 'text', answer: 'denim' },
+                { id: 'q9', type: 'radio', answer: 'China, India and Brazil' },
+                { id: 'q10', type: 'text', answer: 'seed' },
+                { id: 'q11', type: 'radio', answer: 'true' },
+                { id: 'q12', type: 'text', answer: 'factory' },
+                { id: 'q13', type: 'radio', answer: 'to colour the yarn dark blue' },
+                { id: 'q14', type: 'text', answer: 'jeans' },
+                { id: 'q15', type: 'radio', answer: 'false' }
+            ];
+
+            let currentComprehensionCorrect = 0;
+
+            questions.forEach(q => {
+                const resultDiv = document.getElementById(`${q.id}-result`);
+                resultDiv.className = 'result'; // Reset class
+
+                let userAnswer;
+                if (q.type === 'text') {
+                    userAnswer = document.getElementById(q.id).value.trim().toLowerCase();
+                    if (userAnswer === q.answer.toLowerCase()) {
+                        resultDiv.textContent = 'Correct!';
+                        resultDiv.classList.add('correct');
+                        currentComprehensionCorrect++;
+                    } else {
+                        resultDiv.textContent = `Incorrect. The answer is "${q.answer}".`;
+                        resultDiv.classList.add('incorrect');
+                    }
+                } else if (q.type === 'radio') {
+                    const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                    userAnswer = selected ? selected.value : '';
+                    if (userAnswer === q.answer) {
+                        resultDiv.textContent = 'Correct!';
+                        resultDiv.classList.add('correct');
+                        currentComprehensionCorrect++;
+                    } else {
+                        resultDiv.textContent = `Incorrect. The answer is "${q.answer}".`;
+                        resultDiv.classList.add('incorrect');
+                    }
+                }
+            });
+            comprehensionCorrectCount = currentComprehensionCorrect;
+            updateAllScoresDisplay(); // Update scores after checking comprehension
+        }
+
+        // --- Vocabularies Section Logic (Drag and Fill in the Blanks Game) ---
+        const vocabWordsForDragFill = [
+            "cotton", "denim", "dye", "harvest", "jeans", "dark", "light",
+            "useful", "metal", "wood", "leather", "advert", "documentary", "programme", "cheap", "special"
+        ];
+
+        const dragFillSentences = [
+            { id: 's1', parts: ["The soft ", { blank: "cotton" }, " is picked from the fields."], correctWord: "cotton" },
+            { id: 's2', parts: ["Most ", { blank: "jeans" }, " are made from a strong fabric called denim."], correctWord: "jeans" },
+            { id: 's3', parts: ["Indigo ", { blank: "dye" }, " is used to give jeans their blue color."], correctWord: "dye" },
+            { id: 's4', parts: ["Farmers ", { blank: "harvest" }, " their crops in the autumn."], correctWord: "harvest" },
+            { id: 's5', parts: ["She prefers to wear ", { blank: "dark" }, " clothes in winter."], correctWord: "dark" },
+            { id: 's6', parts: ["The room was filled with ", { blank: "light" }, " from the large window."], correctWord: "light" },
+            { id: 's7', parts: ["This tool is very ", { blank: "useful" }, " for fixing things around the house."], correctWord: "useful" },
+            { id: 's8', parts: ["The old table was made of solid ", { blank: "wood" }, "."], correctWord: "wood" },
+            { id: 's9', parts: ["The knight wore shining ", { blank: "metal" }, " armor."], correctWord: "metal" },
+            { id: 's10', parts: ["His new jacket was made of soft ", { blank: "leather" }, "."], correctWord: "leather" },
+            { id: 's11', parts: ["We saw a funny ", { blank: "advert" }, " for a new snack on TV."], correctWord: "advert" },
+            { id: 's12', parts: ["The ", { blank: "documentary" }, " explained how volcanoes erupt."], correctWord: "documentary" },
+            { id: 's13', parts: ["What's your favorite TV ", { blank: "programme" }, " this week?"], correctWord: "programme" },
+            { id: 's14', parts: ["These shoes were very ", { blank: "cheap" }, " at the sale."], correctWord: "cheap" },
+            { id: 's15', parts: ["Today is a ", { blank: "special" }, " day because it's my birthday."], correctWord: "special" },
+            { id: 's16', parts: ["The fabric used for these trousers is called ", { blank: "denim" }, "."], correctWord: "denim" }
+        ];
+
+
+        let draggedItem = null;
+        const dragWordsContainer = document.getElementById('drag-words-container');
+        const sentencesContainer = document.getElementById('sentences-container');
+        const dragFillFeedback = document.getElementById('drag-fill-feedback');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function createDragAndFillGame() {
+            dragWordsContainer.innerHTML = '';
+            sentencesContainer.innerHTML = '';
+            dragFillFeedback.textContent = '';
+            dragFillCorrectCount = 0; // Reset score for new game
+
+            const shuffledWords = [...vocabWordsForDragFill];
+            shuffleArray(shuffledWords);
+
+            // Create draggable word cards
+            shuffledWords.forEach(word => {
+                const wordCard = document.createElement('div');
+                wordCard.classList.add('word-card');
+                wordCard.textContent = word;
+                wordCard.setAttribute('draggable', true);
+                wordCard.dataset.word = word;
+                wordCard.addEventListener('dragstart', dragStart);
+                dragWordsContainer.appendChild(wordCard);
+            });
+
+            const shuffledSentences = [...dragFillSentences];
+            shuffleArray(shuffledSentences);
+
+            // Create sentences with drop zones
+            shuffledSentences.forEach(sentenceObj => {
+                const sentenceItem = document.createElement('div');
+                sentenceItem.classList.add('sentence-item');
+
+                sentenceObj.parts.forEach(part => {
+                    if (typeof part === 'string') {
+                        sentenceItem.append(document.createTextNode(part));
+                    } else if (part.blank) {
+                        const dropZone = document.createElement('span');
+                        dropZone.classList.add('drop-zone');
+                        dropZone.dataset.correctWord = part.blank; // Store the correct word for validation
+                        dropZone.addEventListener('dragover', dragOver);
+                        dropZone.addEventListener('dragleave', dragLeave);
+                        dropZone.addEventListener('drop', drop);
+                        sentenceItem.appendChild(dropZone);
+                    }
+                });
+                sentencesContainer.appendChild(sentenceItem);
+            });
+            updateAllScoresDisplay(); // Update scores display on game reset
+        }
+
+        function dragStart(e) {
+            draggedItem = e.target;
+            e.dataTransfer.setData('text/plain', draggedItem.dataset.word);
+            draggedItem.classList.add('dragging');
+        }
+
+        function dragOver(e) {
+            e.preventDefault(); // Allow drop
+            if (e.target.classList.contains('drop-zone') && !e.target.classList.contains('filled')) {
+                e.target.classList.add('hovered');
+            }
+        }
+
+        function dragLeave(e) {
+            if (e.target.classList.contains('drop-zone')) {
+                e.target.classList.remove('hovered');
+            }
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const target = e.target.closest('.drop-zone');
+            if (!target || target.classList.contains('filled')) return;
+
+            target.classList.remove('hovered');
+            draggedItem.classList.remove('dragging');
+
+            const draggedWord = draggedItem.dataset.word;
+            const correctWord = target.dataset.correctWord;
+
+            if (draggedWord === correctWord) {
+                dragFillFeedback.textContent = `Correct! "${draggedWord}" fits.`;
+                dragFillFeedback.classList.add('correct');
+                dragFillFeedback.classList.remove('incorrect');
+
+                target.textContent = draggedWord;
+                target.classList.add('filled');
+                target.removeEventListener('dragover', dragOver);
+                target.removeEventListener('dragleave', dragLeave);
+                target.removeEventListener('drop', drop);
+                draggedItem.style.display = 'none'; // Hide the word card
+                draggedItem.removeEventListener('dragstart', dragStart); // Prevent further dragging
+
+                dragFillCorrectCount++;
+                if (dragFillCorrectCount === dragFillSentences.length) {
+                    dragFillFeedback.textContent = 'Congratulations! You filled all the blanks!';
+                    dragFillFeedback.classList.add('correct');
+                }
+            } else {
+                dragFillFeedback.textContent = `Incorrect. "${draggedWord}" does not fit here.`;
+                dragFillFeedback.classList.add('incorrect');
+                dragFillFeedback.classList.remove('correct');
+                // Briefly show incorrect state
+                target.classList.add('incorrect-fill');
+                setTimeout(() => {
+                    target.classList.remove('incorrect-fill');
+                }, 800);
+            }
+            draggedItem = null; // Reset dragged item
+            updateAllScoresDisplay(); // Update scores after each drop
+        }
+
+        function resetDragFillGame() {
+            createDragAndFillGame();
+        }
+
+
+        // --- Vocabularies Section Logic (Crossword Puzzle) ---
+        const crosswordData = {
+            gridSize: 10, // 10x10 grid
+            words: [
+                { word: "COTTON", clue: "Soft white fibrous substance that surrounds the seeds of a tropical and subtropical plant.", orientation: "across", start: { row: 0, col: 0 } },
+                { word: "DENIM", clue: "A sturdy cotton twill fabric, typically blue, used for jeans.", orientation: "down", start: { row: 0, col: 0 } },
+                { word: "JEANS", clue: "Trousers made of denim.", orientation: "across", start: { row: 2, col: 3 } },
+                { word: "DYE", clue: "A natural or synthetic substance used to add a colour to something.", orientation: "down", start: { row: 2, col: 6 } },
+                { word: "HARVEST", clue: "The process or period of gathering in crops.", orientation: "across", start: { row: 5, col: 2 } },
+                { word: "DARK", clue: "Having very little or no light.", orientation: "down", start: { row: 5, col: 2 } },
+                { word: "LIGHT", clue: "Having little weight; not heavy.", orientation: "across", start: { row: 7, col: 4 } },
+                { word: "METAL", clue: "A solid material that is typically hard, shiny, malleable, fusible, and ductile, with good electrical and thermal conductivity.", orientation: "down", start: { row: 3, col: 8 } },
+                { word: "USEFUL", clue: "Able to be used for a practical purpose or in several ways.", orientation: "across", start: { row: 9, col: 0 } }
+            ]
+        };
+
+        let crosswordGrid = [];
+
+        function createCrosswordGrid() {
+            const container = document.getElementById('crossword-container');
+            container.innerHTML = ''; // Clear previous grid
+            const gridElement = document.createElement('div');
+            gridElement.classList.add('crossword-grid');
+            gridElement.style.gridTemplateColumns = `repeat(${crosswordData.gridSize}, 1fr)`;
+
+            crosswordGrid = Array(crosswordData.gridSize).fill(null).map(() => Array(crosswordData.gridSize).fill(''));
+
+            // Populate grid with empty cells
+            for (let r = 0; r < crosswordData.gridSize; r++) {
+                for (let c = 0; c < crosswordData.gridSize; c++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('crossword-cell', 'empty');
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    gridElement.appendChild(cell);
+                }
+            }
+
+            // Place words and create input fields
+            crosswordData.words.forEach((wordObj, wordIndex) => {
+                let { word, orientation, start } = wordObj;
+                let currentCellIndex = 0; // To track cell number for numbering
+
+                for (let i = 0; i < word.length; i++) {
+                    let r = start.row;
+                    let c = start.col;
+                    if (orientation === "across") {
+                        c += i;
+                    } else { // down
+                        r += i;
+                    }
+
+                    if (r < crosswordData.gridSize && c < crosswordData.gridSize) {
+                        const cellElement = gridElement.children[r * crosswordData.gridSize + c];
+                        cellElement.classList.remove('empty');
+                        cellElement.innerHTML = ''; // Clear existing content
+
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.maxLength = 1;
+                        input.dataset.row = r;
+                        input.dataset.col = c;
+                        input.dataset.wordIndex = wordIndex;
+                        input.dataset.letterIndex = i;
+                        input.oninput = (e) => e.target.value = e.target.value.toUpperCase(); // Force uppercase
+                        cellElement.appendChild(input);
+
+                        // Add number to the first letter of the word
+                        if (i === 0) {
+                            const numberSpan = document.createElement('span');
+                            numberSpan.classList.add('number');
+                            numberSpan.textContent = wordIndex + 1; // 1-based indexing for clues
+                            cellElement.appendChild(numberSpan);
+                        }
+                    }
+                }
+            });
+
+            container.appendChild(gridElement);
+            generateCrosswordClues();
+        }
+
+        function generateCrosswordClues() {
+            const acrossClues = document.getElementById('crossword-clues-across');
+            const downClues = document.getElementById('crossword-clues-down');
+            acrossClues.innerHTML = '';
+            downClues.innerHTML = '';
+
+            crosswordData.words.forEach((wordObj, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${wordObj.clue}`;
+                if (wordObj.orientation === 'across') {
+                    acrossClues.appendChild(li);
+                } else {
+                    downClues.appendChild(li);
+                }
+            });
+        }
+
+        function checkCrossword() {
+            let correctCount = 0;
+            let totalLetters = 0;
+
+            crosswordData.words.forEach((wordObj, wordIndex) => {
+                let { word, orientation, start } = wordObj;
+                for (let i = 0; i < word.length; i++) {
+                    totalLetters++;
+                    let r = start.row;
+                    let c = start.col;
+                    if (orientation === "across") {
+                        c += i;
+                    } else { // down
+                        r += i;
+                    }
+
+                    const cellElement = document.querySelector(`.crossword-cell input[data-row="${r}"][data-col="${c}"]`);
+                    if (cellElement && cellElement.value.toUpperCase() === word[i]) {
+                        correctCount++;
+                        cellElement.style.backgroundColor = '#e8ffe8'; // Light green for correct
+                    } else if (cellElement) {
+                        cellElement.style.backgroundColor = '#ffe8e8'; // Light red for incorrect
+                    }
+                }
+            });
+
+            const resultDiv = document.getElementById('crossword-result');
+            if (correctCount === totalLetters) {
+                resultDiv.textContent = 'Congratulations! You completed the crossword!';
+                resultDiv.classList.add('correct');
+                resultDiv.classList.remove('incorrect');
+            } else {
+                resultDiv.textContent = `You got ${correctCount} out of ${totalLetters} letters correct. Keep trying!`;
+                resultDiv.classList.add('incorrect');
+                resultDiv.classList.remove('correct');
+            }
+        }
+
+
+        // --- Suffixes Game Logic ---
+        const suffixWords = [
+            {
+                stem: "express", suffix: "sion", full: "expression",
+                meaning: "the process of making known one's thoughts or feelings",
+                meaningOptions: [
+                    "the process of making known one's thoughts or feelings",
+                    "a type of fast train",
+                    "a small, round fruit"
+                ]
+            },
+            {
+                stem: "discuss", suffix: "sion", full: "discussion",
+                meaning: "a conversation or debate about a particular topic",
+                meaningOptions: [
+                    "a conversation or debate about a particular topic",
+                    "a loud noise",
+                    "a type of fish"
+                ]
+            },
+            {
+                stem: "decide", suffix: "sion", full: "decision",
+                meaning: "a conclusion or resolution reached after consideration",
+                meaningOptions: [
+                    "a conclusion or resolution reached after consideration",
+                    "a sudden drop",
+                    "a type of dance"
+                ]
+            },
+            {
+                stem: "divide", suffix: "sion", full: "division",
+                meaning: "the action of separating something into parts",
+                meaningOptions: [
+                    "the action of separating something into parts",
+                    "a large, open space",
+                    "a type of musical instrument"
+                ]
+            },
+            {
+                stem: "confess", suffix: "sion", full: "confession",
+                meaning: "a formal statement admitting that one is guilty of a crime",
+                meaningOptions: [
+                    "a formal statement admitting that one is guilty of a crime",
+                    "a type of sweet pastry",
+                    "a secret meeting"
+                ]
+            },
+            {
+                stem: "invent", suffix: "tion", full: "invention",
+                meaning: "the action of inventing something, typically a process or device",
+                meaningOptions: [
+                    "the action of inventing something, typically a process or device",
+                    "a type of plant",
+                    "a loud shout"
+                ]
+            },
+            {
+                stem: "act", suffix: "tion", full: "action",
+                meaning: "the fact or process of doing something, typically to achieve an aim",
+                meaningOptions: [
+                    "the fact or process of doing something, typically to achieve an aim",
+                    "a small, soft pillow",
+                    "a type of bird"
+                ]
+            },
+            {
+                stem: "create", suffix: "tion", full: "creation",
+                meaning: "the action or process of bringing something into existence",
+                meaningOptions: [
+                    "the action or process of bringing something into existence",
+                    "a large, empty box",
+                    "a type of weather"
+                ]
+            },
+            {
+                stem: "educate", suffix: "tion", full: "education",
+                meaning: "the process of receiving or giving systematic instruction",
+                meaningOptions: [
+                    "the process of receiving or giving systematic instruction",
+                    "a type of building",
+                    "a loud bell"
+                ]
+            },
+            {
+                stem: "inform", suffix: "tion", full: "information",
+                meaning: "facts provided or learned about something or someone",
+                meaningOptions: [
+                    "facts provided or learned about something or someone",
+                    "a type of strong wind",
+                    "a small, colorful toy"
+                ]
+            },
+            {
+                stem: "pollute", suffix: "tion", full: "pollution",
+                meaning: "the presence in or introduction into the environment of a substance or thing that has harmful or poisonous effects",
+                meaningOptions: [
+                    "the presence in or introduction into the environment of a substance or thing that has harmful or poisonous effects",
+                    "a type of sweet drink",
+                    "a happy song"
+                ]
+            },
+            {
+                stem: "protect", suffix: "tion", full: "protection",
+                meaning: "the action of protecting, or the state of being protected",
+                meaningOptions: [
+                    "the action of protecting, or the state of being protected",
+                    "a type of soft material",
+                    "a quick movement"
+                ]
+            },
+            {
+                stem: "collect", suffix: "tion", full: "collection",
+                meaning: "a group of things or people",
+                meaningOptions: [
+                    "a group of things or people",
+                    "a type of large animal",
+                    "a small, sharp tool"
+                ]
+            },
+            {
+                stem: "admit", suffix: "sion", full: "admission",
+                meaning: "the process or fact of entering or being allowed to enter a place or organization",
+                meaningOptions: [
+                    "the process or fact of entering or being allowed to enter a place or organization",
+                    "a type of sweet candy",
+                    "a loud argument"
+                ]
+            },
+            {
+                stem: "permit", suffix: "sion", full: "permission",
+                meaning: "the action of officially allowing someone to do a particular thing; consent or authorization",
+                meaningOptions: [
+                    "the action of officially allowing someone to do a particular thing; consent or authorization",
+                    "a type of small bird",
+                    "a difficult puzzle"
+                ]
+            }
+        ];
+
+        let currentSuffixWordIndex = 0;
+        let suffixGameState = 'chooseSuffix'; // 'chooseSuffix' or 'chooseMeaning'
+        const suffixWordDisplay = document.getElementById('suffix-word-display');
+        const suffixChoiceArea = document.getElementById('suffix-choice-area');
+        const meaningChoiceArea = document.getElementById('meaning-choice-area');
+        const suffixMeaningQuestion = document.getElementById('suffix-meaning-question');
+        const suffixMeaningOptions = document.getElementById('suffix-meaning-options');
+        const suffixFeedback = document.getElementById('suffix-feedback');
+        const suffixScoreDisplay = document.getElementById('suffix-score');
+
+        function initializeSuffixGame() {
+            shuffleArray(suffixWords);
+            currentSuffixWordIndex = 0;
+            suffixCorrectCount = 0;
+            suffixMeaningCorrectCount = 0;
+            suffixGameState = 'chooseSuffix';
+            updateSuffixDisplay();
+            updateSuffixScore();
+            suffixFeedback.textContent = '';
+            updateAllScoresDisplay();
+        }
+
+        function updateSuffixDisplay() {
+            if (currentSuffixWordIndex < suffixWords.length) {
+                const currentWord = suffixWords[currentSuffixWordIndex];
+                if (suffixGameState === 'chooseSuffix') {
+                    suffixWordDisplay.textContent = currentWord.stem + '...';
+                    suffixChoiceArea.style.display = 'block';
+                    meaningChoiceArea.style.display = 'none';
+                    suffixFeedback.textContent = ''; // Clear feedback for new word
+                } else if (suffixGameState === 'chooseMeaning') {
+                    suffixWordDisplay.textContent = currentWord.full;
+                    suffixChoiceArea.style.display = 'none';
+                    meaningChoiceArea.style.display = 'block';
+                    displayMeaningOptions(currentWord);
+                }
+            } else {
+                suffixWordDisplay.textContent = "Game Over! All words completed.";
+                suffixChoiceArea.style.display = 'none';
+                meaningChoiceArea.style.display = 'none';
+                suffixFeedback.textContent = `Final Score: ${suffixCorrectCount + suffixMeaningCorrectCount} / ${suffixTotalPoints}`;
+            }
+        }
+
+        function displayMeaningOptions(wordObj) {
+            suffixMeaningQuestion.textContent = `What is the meaning of "${wordObj.full}"?`;
+            suffixMeaningOptions.innerHTML = ''; // Clear previous options
+
+            const options = [...wordObj.meaningOptions];
+            shuffleArray(options); // Shuffle options so correct answer isn't always first
+
+            options.forEach((option, index) => {
+                const label = document.createElement('label');
+                label.innerHTML = `<input type="radio" name="meaning_option" value="${option}"> <span>${option}</span>`;
+                suffixMeaningOptions.appendChild(label);
+            });
+        }
+
+        function checkSuffix(chosenSuffix) {
+            if (currentSuffixWordIndex >= suffixWords.length || suffixGameState !== 'chooseSuffix') return;
+
+            const currentWord = suffixWords[currentSuffixWordIndex];
+            if (chosenSuffix === currentWord.suffix) {
+                suffixFeedback.textContent = `Correct suffix! Now choose the meaning.`;
+                suffixFeedback.classList.remove('incorrect');
+                suffixFeedback.classList.add('correct');
+                suffixCorrectCount++;
+                suffixGameState = 'chooseMeaning';
+                updateSuffixDisplay();
+            } else {
+                suffixFeedback.textContent = `Incorrect suffix. It's "${currentWord.full}".`;
+                suffixFeedback.classList.remove('correct');
+                suffixFeedback.classList.add('incorrect');
+                // Allow user to try again or move to next word
+            }
+            updateSuffixScore();
+            updateAllScoresDisplay();
+        }
+
+        function checkMeaning() {
+            if (currentSuffixWordIndex >= suffixWords.length || suffixGameState !== 'chooseMeaning') return;
+
+            const currentWord = suffixWords[currentSuffixWordIndex];
+            const selectedMeaning = document.querySelector('input[name="meaning_option"]:checked');
+
+            if (selectedMeaning && selectedMeaning.value === currentWord.meaning) {
+                suffixFeedback.textContent = 'Correct meaning! Well done!';
+                suffixFeedback.classList.remove('incorrect');
+                suffixFeedback.classList.add('correct');
+                suffixMeaningCorrectCount++;
+            } else {
+                suffixFeedback.textContent = `Incorrect meaning. The correct meaning is: "${currentWord.meaning}".`;
+                suffixFeedback.classList.remove('correct');
+                suffixFeedback.classList.add('incorrect');
+            }
+            updateSuffixScore();
+            updateAllScoresDisplay();
+            // Automatically move to the next word after checking meaning
+            setTimeout(() => {
+                nextSuffixWord();
+            }, 1500); // Give a moment to read feedback
+        }
+
+
+        function nextSuffixWord() {
+            currentSuffixWordIndex++;
+            suffixGameState = 'chooseSuffix'; // Reset state for next word
+            suffixFeedback.textContent = '';
+            updateSuffixDisplay();
+        }
+
+        function updateSuffixScore() {
+            suffixScoreDisplay.textContent = `Score: ${suffixCorrectCount + suffixMeaningCorrectCount}`;
+        }
+
+        // --- Passive Voice Game Logic ---
+        const passiveVoiceSentences = [
+            { active: "The dog chased the cat.", passive: "The cat was chased by the dog." },
+            { active: "She wrote a letter.", passive: "A letter was written by her." },
+            { active: "They built a house.", passive: "A house was built by them." },
+            { active: "He will read the book.", passive: "The book will be read by him." },
+            { active: "The wind blew the leaves.", passive: "The leaves were blown by the wind." },
+            { active: "The teacher teaches the students.", passive: "The students are taught by the teacher." },
+            { active: "My mother cooked dinner.", passive: "Dinner was cooked by my mother." },
+            { active: "The police arrested the thief.", passive: "The thief was arrested by the police." },
+            { active: "Someone stole my wallet.", passive: "My wallet was stolen." },
+            { active: "The company will launch a new product.", passive: "A new product will be launched by the company." }
+        ];
+
+        let currentPassiveSentenceIndex = 0;
+        const passiveSentenceDisplay = document.getElementById('passive-sentence-display');
+        const passiveUserInput = document.getElementById('passive-user-input');
+        const passiveFeedback = document.getElementById('passive-feedback');
+        const passiveScoreDisplay = document.getElementById('passive-score');
+
+        function initializePassiveVoiceGame() {
+            shuffleArray(passiveVoiceSentences);
+            currentPassiveSentenceIndex = 0;
+            passiveVoiceCorrectCount = 0; // Reset score for new game
+            updatePassiveDisplay();
+            updatePassiveScore();
+            passiveUserInput.value = '';
+            passiveFeedback.textContent = '';
+            updateAllScoresDisplay(); // Update scores display on game reset
+        }
+
+        function updatePassiveDisplay() {
+            if (currentPassiveSentenceIndex < passiveVoiceSentences.length) {
+                passiveSentenceDisplay.textContent = `Active: "${passiveVoiceSentences[currentPassiveSentenceIndex].active}"`;
+            } else {
+                passiveSentenceDisplay.textContent = "Game Over! All sentences completed.";
+                passiveFeedback.textContent = `Final Score: ${passiveVoiceCorrectCount} / ${passiveVoiceSentences.length}`;
+            }
+        }
+
+        function checkPassiveVoice() {
+            if (currentPassiveSentenceIndex >= passiveVoiceSentences.length) return; // Game over
+
+            const currentSentence = passiveVoiceSentences[currentPassiveSentenceIndex];
+            const userAnswer = passiveUserInput.value.trim();
+
+            // Simple normalization for comparison (remove punctuation, extra spaces, lowercase)
+            const normalize = (text) => text.toLowerCase().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ').trim();
+
+            if (normalize(userAnswer) === normalize(currentSentence.passive)) {
+                passiveFeedback.textContent = 'Correct! Well done!';
+                passiveFeedback.classList.remove('incorrect');
+                passiveFeedback.classList.add('correct');
+                passiveVoiceCorrectCount++;
+            } else {
+                passiveFeedback.textContent = `Incorrect. The correct passive form is: "${currentSentence.passive}"`;
+                passiveFeedback.classList.remove('correct');
+                passiveFeedback.classList.add('incorrect');
+            }
+            updatePassiveScore();
+            updateAllScoresDisplay(); // Update scores after each check
+        }
+
+        function nextPassiveSentence() {
+            currentPassiveSentenceIndex++;
+            passiveUserInput.value = '';
+            passiveFeedback.textContent = '';
+            updatePassiveDisplay();
+        }
+
+        function updatePassiveScore() {
+            passiveScoreDisplay.textContent = `Score: ${passiveVoiceCorrectCount}`;
+        }
+
+        // --- Scores Tab Logic ---
+        function updateAllScoresDisplay() {
+            document.getElementById('comprehension-score-display').textContent = `${comprehensionCorrectCount}/${comprehensionTotalQuestions}`;
+            document.getElementById('drag-fill-score-display').textContent = `${dragFillCorrectCount}/${dragFillTotalQuestions}`;
+            document.getElementById('suffixes-score-display').textContent = `${suffixCorrectCount + suffixMeaningCorrectCount}/${suffixTotalPoints}`;
+            document.getElementById('passive-voice-score-display').textContent = `${passiveVoiceCorrectCount}/${passiveVoiceTotalQuestions}`;
+        }
+
+
+        // Initialize games and show home page on page load
+        window.onload = function() {
+            createDragAndFillGame(); // Initialize the new drag and fill game
+            createCrosswordGrid();
+            initializeSuffixGame();
+            initializePassiveVoiceGame();
+            showPage('home-content', document.querySelector('.tab-button.active')); // Show home page initially
+            updateAllScoresDisplay(); // Initial display of scores
+        };
+    </script>
+</body>
+</html>
