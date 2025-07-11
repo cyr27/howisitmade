@@ -261,7 +261,7 @@
             border-color: #2ecc71;
             background-color: #e8ffe8;
         }
-        .drop-zone.filled {
+        .drop-zone.correct-fill { /* Changed from .filled to .correct-fill */
             border-bottom: 2px solid #27ae60;
             background-color: #e8ffe8;
             color: #27ae60;
@@ -845,6 +845,7 @@
                 </div>
             </div>
             <p id="drag-fill-feedback" class="drag-fill-feedback"></p>
+            <button class="check-button" onclick="checkDragFillAnswers()"><i class="fas fa-check-circle mr-2"></i>Check Answers</button>
             <button class="check-button" onclick="resetDragFillGame()"><i class="fas fa-redo-alt mr-2"></i>Reset Drag & Fill Game</button>
 
             <!-- Crossword Puzzle -->
@@ -1089,8 +1090,7 @@
             dragWordsContainer.innerHTML = '';
             sentencesContainer.innerHTML = '';
             dragFillFeedback.textContent = '';
-            dragFillCorrectCount = 0; // Reset score for new game
-
+            
             const shuffledWords = [...vocabWordsForDragFill];
             shuffleArray(shuffledWords);
 
@@ -1120,6 +1120,7 @@
                         const dropZone = document.createElement('span');
                         dropZone.classList.add('drop-zone');
                         dropZone.dataset.correctWord = part.blank; // Store the correct word for validation
+                        dropZone.dataset.currentWord = ''; // Initialize current word in blank
                         dropZone.addEventListener('dragover', dragOver);
                         dropZone.addEventListener('dragleave', dragLeave);
                         dropZone.addEventListener('drop', drop);
@@ -1128,6 +1129,7 @@
                 });
                 sentencesContainer.appendChild(sentenceItem);
             });
+            dragFillCorrectCount = 0; // Reset score on new game init
             updateAllScoresDisplay(); // Update scores display on game reset
         }
 
@@ -1139,7 +1141,7 @@
 
         function dragOver(e) {
             e.preventDefault(); // Allow drop
-            if (e.target.classList.contains('drop-zone') && !e.target.classList.contains('filled')) {
+            if (e.target.classList.contains('drop-zone') && !e.target.dataset.currentWord) { // Only allow drop if not already filled
                 e.target.classList.add('hovered');
             }
         }
@@ -1153,45 +1155,54 @@
         function drop(e) {
             e.preventDefault();
             const target = e.target.closest('.drop-zone');
-            if (!target || target.classList.contains('filled')) return;
+            if (!target || target.dataset.currentWord) return; // Only allow drop if not already filled
 
             target.classList.remove('hovered');
-            draggedItem.classList.remove('dragging');
+            if (draggedItem) { // Check if draggedItem is not null
+                draggedItem.classList.remove('dragging');
+            }
 
-            const draggedWord = draggedItem.dataset.word;
-            const correctWord = target.dataset.correctWord;
+            const draggedWord = draggedItem ? draggedItem.dataset.word : ''; // Get the word from the dragged item
+            
+            // Update the text content of the drop zone
+            target.textContent = draggedWord;
+            target.dataset.currentWord = draggedWord; // Store the word currently in the blank
 
-            if (draggedWord === correctWord) {
-                dragFillFeedback.textContent = `Correct! "${draggedWord}" fits.`;
+            // Hide the dragged word card
+            if (draggedItem) {
+                draggedItem.style.display = 'none';
+                draggedItem.removeEventListener('dragstart', dragStart); // Prevent further dragging
+            }
+
+            draggedItem = null; // Reset dragged item
+            // No immediate feedback or score update here
+        }
+
+        function checkDragFillAnswers() {
+            let currentCorrect = 0;
+            const dropZones = document.querySelectorAll('#sentences-container .drop-zone');
+            dropZones.forEach(zone => {
+                zone.classList.remove('correct-fill', 'incorrect-fill'); // Clear previous feedback
+
+                if (zone.dataset.currentWord === zone.dataset.correctWord) {
+                    currentCorrect++;
+                    zone.classList.add('correct-fill');
+                } else if (zone.dataset.currentWord !== '') { // If it's filled but incorrect
+                    zone.classList.add('incorrect-fill');
+                }
+            });
+            dragFillCorrectCount = currentCorrect;
+            dragFillFeedback.textContent = `You got ${dragFillCorrectCount} out of ${dragFillTotalQuestions} correct!`;
+            if (dragFillCorrectCount === dragFillTotalQuestions) {
                 dragFillFeedback.classList.add('correct');
                 dragFillFeedback.classList.remove('incorrect');
-
-                target.textContent = draggedWord;
-                target.classList.add('filled');
-                target.removeEventListener('dragover', dragOver);
-                target.removeEventListener('dragleave', dragLeave);
-                target.removeEventListener('drop', drop);
-                draggedItem.style.display = 'none'; // Hide the word card
-                draggedItem.removeEventListener('dragstart', dragStart); // Prevent further dragging
-
-                dragFillCorrectCount++;
-                if (dragFillCorrectCount === dragFillSentences.length) {
-                    dragFillFeedback.textContent = 'Congratulations! You filled all the blanks!';
-                    dragFillFeedback.classList.add('correct');
-                }
             } else {
-                dragFillFeedback.textContent = `Incorrect. "${draggedWord}" does not fit here.`;
                 dragFillFeedback.classList.add('incorrect');
                 dragFillFeedback.classList.remove('correct');
-                // Briefly show incorrect state
-                target.classList.add('incorrect-fill');
-                setTimeout(() => {
-                    target.classList.remove('incorrect-fill');
-                }, 800);
             }
-            draggedItem = null; // Reset dragged item
-            updateAllScoresDisplay(); // Update scores after each drop
+            updateAllScoresDisplay(); // Update scores after checking
         }
+
 
         function resetDragFillGame() {
             createDragAndFillGame();
